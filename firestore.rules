@@ -1,0 +1,30 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Citas: se pueden ver, crear y editar con sesión iniciada.
+    // NUNCA se pueden borrar desde la app.
+    match /citas/{citaId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null
+        && request.resource.data.cliente is string
+        && request.resource.data.cliente.size() > 0;
+      allow update: if request.auth != null
+        && request.resource.data.cliente is string
+        && request.resource.data.cliente.size() > 0
+        && request.resource.data.creadoEn == resource.data.creadoEn;
+      allow delete: if false;
+    }
+
+    // Equipos y personas: se pueden ver y editar, pero no borrar el registro.
+    match /config/{docId} {
+      allow read, create, update: if request.auth != null;
+      allow delete: if false;
+    }
+
+    // Todo lo demás queda bloqueado
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
