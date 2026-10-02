@@ -1,0 +1,791 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Agenda de citas · Eleganza Academia</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2210%22%20fill%3D%22%23000%22/%3E%3Ctext%20x%3D%2232%22%20y%3D%2244%22%20text-anchor%3D%22middle%22%20font-family%3D%22Playfair%20Display%2CGeorgia%2CTimes%20New%20Roman%2Cserif%22%20font-weight%3D%22900%22%20font-size%3D%2240%22%20fill%3D%22%23fff%22%3EE%3C/text%3E%3Crect%20x%3D%2214%22%20y%3D%2251%22%20width%3D%2236%22%20height%3D%224%22%20fill%3D%22%23af62ff%22/%3E%3C/svg%3E">
+<meta name="theme-color" content="#000000">
+<script>try{var t=localStorage.getItem("agenda-tema");if(t==="dark"||t==="light")document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Raleway:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#FFFFFF; --surface:#FFFFFF; --ink:#000000; --muted:#5E5866; --line:#E4DEEB;
+  --accent:#af62ff; --accent-ink:#000000; --accent-text:#7A2FD0; --soft:#F3EAFF; --warn:#7A4A00; --warn-bg:#FFF1D6;
+  --danger:#B3261E; --now:#af62ff; --chip:#F6F2FA;
+  box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#000000; --surface:#0B0B0B; --ink:#FFFFFF; --muted:#A9A3B2; --line:#2A2530;
+    --accent:#af62ff; --accent-ink:#000000; --accent-text:#C99BFF; --soft:#1E1429; --warn:#FFD48A; --warn-bg:#2E2412;
+    --danger:#FF8A80; --now:#af62ff; --chip:#141018;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#000000; --surface:#0B0B0B; --ink:#FFFFFF; --muted:#A9A3B2; --line:#2A2530;
+  --accent:#af62ff; --accent-ink:#000000; --accent-text:#C99BFF; --soft:#1E1429; --warn:#FFD48A; --warn-bg:#2E2412;
+  --danger:#FF8A80; --now:#af62ff; --chip:#141018;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 Raleway,system-ui,-apple-system,"Segoe UI",sans-serif}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1200px;margin:0 auto;padding:20px 16px 48px}
+
+header.top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:18px}
+.brandbar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-bottom:14px;margin-bottom:22px;border-bottom:1px solid var(--line)}
+.logo{display:inline-flex;flex-direction:column;align-items:center;line-height:1;text-decoration:none;color:var(--ink)}
+.logo .w{font-family:"Playfair Display",Georgia,serif;font-weight:900;font-size:24px;letter-spacing:.02em}
+.logo .a{font-family:Raleway,system-ui,sans-serif;font-weight:700;font-size:9.5px;letter-spacing:.42em;padding:3px 0 2px .42em;margin-top:3px;border-top:1px solid currentColor;border-bottom:1px solid currentColor;align-self:stretch;text-align:center}
+.brandbar .tag{font-size:14px;color:var(--muted);display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+.themes{display:inline-flex;border:1px solid var(--line);border-radius:4px;overflow:hidden}
+.themes .th{border:0;border-radius:0;padding:6px 12px;font-size:13px}
+.themes .th+.th{border-left:1px solid var(--line)}
+.themes .th.on{background:var(--accent);color:var(--accent-ink)}
+.login .themes{position:absolute;top:calc(16px + env(safe-area-inset-top,0px));right:16px}
+.login{position:fixed;inset:0;z-index:40;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:24px}
+.login-card{width:min(400px,100%);border:1px solid var(--line);border-top:5px solid var(--accent);border-radius:4px;background:var(--surface);padding:28px}
+.login-card .logo{margin-bottom:22px}
+.login-card h2{font-family:"Playfair Display",Georgia,serif;font-weight:400;text-transform:uppercase;font-size:28px;margin:0 0 6px}
+.login-card label.f{margin-top:14px}
+.login-card .btn.primary{width:100%;margin-top:20px;padding:11px}
+.linkbtn{background:none;border:0;color:var(--accent-text);padding:0;margin-top:14px;font-weight:600;text-decoration:underline}
+.msg{margin-top:14px;font-size:14px;color:var(--danger)}
+.msg.ok{color:var(--accent-text)}
+.day-title{font-family:"Playfair Display",Georgia,"Times New Roman",serif;font-weight:400;font-size:clamp(28px,5vw,48px);line-height:1.05;text-transform:uppercase;margin:0;display:flex;flex-wrap:wrap;align-items:center;gap:6px 16px}
+.day-title .bar{flex:0 0 auto;width:clamp(40px,8vw,110px);height:10px;background:var(--accent)}
+.day-title small{display:block;flex-basis:100%;text-transform:none;font-size:15px;font-weight:500;letter-spacing:0;color:var(--muted);font-family:Raleway,system-ui,sans-serif;margin-bottom:4px}
+.actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.btn{border:1px solid var(--line);background:var(--surface);border-radius:4px;padding:8px 14px;font-weight:600}
+.btn:hover{border-color:var(--accent)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:700}
+.btn.primary:hover{filter:brightness(1.08)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn.danger{color:var(--danger)}
+.btn.icon{padding:8px 11px}
+input[type=date].btn{padding:7px 10px}
+
+.teams{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;margin-bottom:14px;scrollbar-width:thin}
+.team-tab{flex:0 0 auto;border:1px solid var(--line);background:var(--surface);border-radius:4px;padding:8px 16px;font-family:"Playfair Display",Georgia,serif;font-size:16px;white-space:nowrap}
+.team-tab:hover{border-color:var(--accent)}
+.team-tab .k{color:var(--muted);font-family:Raleway,system-ui,sans-serif;font-size:12px;margin-left:8px}
+.team-tab.sel{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.team-tab.sel .k{color:inherit;opacity:.8}
+.team-tab.add{border-style:dashed;color:var(--muted)}
+label.f.name{margin-bottom:14px}
+.week{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:16px}
+.wday{position:relative;border:1px solid var(--line);background:var(--surface);border-radius:4px;padding:8px 6px 10px;text-align:center;line-height:1.2}
+.wday:hover{border-color:var(--accent)}
+.wday .n{font-family:"Playfair Display",Georgia,"Times New Roman",serif;font-size:24px;font-weight:400;display:block}
+.wday .d{font-size:12px;color:var(--muted)}
+.wday .c{display:block;font-size:12px;margin-top:4px;color:var(--muted);min-height:1.2em}
+.wday.today .d{color:var(--accent-text);font-weight:700}
+.wday.sel{background:var(--soft);border-color:var(--accent)}
+.wday.sel::after{content:"";position:absolute;left:-1px;right:-1px;bottom:-1px;height:5px;background:var(--accent)}
+.wday.sel .n{color:var(--accent-text)}
+
+.tools{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;align-items:flex-start}
+.search{position:relative;flex:1 1 280px}
+.search input{width:100%;border:1px solid var(--line);border-radius:4px;padding:10px 12px;background:var(--surface);color:var(--ink);font-size:15px}
+.search input:focus{border-color:var(--accent)}
+.results{position:absolute;left:0;right:0;top:calc(100% + 4px);z-index:20;background:var(--surface);border:1px solid var(--line);border-top:4px solid var(--accent);border-radius:4px;max-height:60vh;overflow:auto;box-shadow:0 12px 30px rgba(0,0,0,.35)}
+.res{display:block;width:100%;text-align:left;background:none;border:0;border-bottom:1px solid var(--line);padding:10px 14px}
+.res:last-child{border-bottom:0}
+.res:hover,.res:focus-visible{background:var(--soft)}
+.res b{font-weight:700;display:block}
+.res span{color:var(--muted);font-size:13px}
+.res .nf{color:var(--accent-text);font-weight:700}
+.res-empty{padding:12px 14px;color:var(--muted);font-size:14px}
+.btn .badge{display:inline-block;min-width:22px;margin-left:6px;padding:0 6px;border-radius:999px;background:var(--accent);color:var(--accent-ink);font-size:12px;text-align:center}
+.nf-list{display:flex;flex-direction:column;gap:8px;max-height:55vh;overflow:auto}
+.nf-item{display:block;width:100%;text-align:left;border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:4px;background:var(--bg);padding:10px 12px}
+.nf-item:hover{border-color:var(--accent)}
+.nf-item b{display:block}
+.nf-item span{display:block;color:var(--muted);font-size:13px}
+.check{grid-column:1/-1;display:flex;gap:10px;align-items:flex-start;font-size:14px;cursor:pointer;padding:10px 12px;border:1px dashed var(--line);border-radius:4px}
+.check input{width:18px;height:18px;margin-top:2px;accent-color:#af62ff}
+.check small{display:block;color:var(--muted)}
+.summary{display:flex;flex-wrap:wrap;gap:6px 18px;margin:0 0 14px;color:var(--muted);font-size:14px}
+.summary b{color:var(--accent-text);font-weight:700}
+.notice{background:var(--warn-bg);color:var(--warn);border-radius:4px;padding:8px 12px;font-size:14px;margin-bottom:12px}
+
+.board{background:var(--surface);border:1px solid var(--line);border-top:4px solid var(--accent);border-radius:4px;overflow:hidden}
+.board-scroll{overflow-x:auto}
+.grid{display:grid;min-width:100%}
+.colhead{position:sticky;top:0;z-index:3;background:var(--surface);border-bottom:1px solid var(--line);padding:10px 10px;font-family:"Playfair Display",Georgia,serif;font-size:16px;display:flex;align-items:center;gap:8px;white-space:nowrap}
+.colhead .sw{width:10px;height:10px;border-radius:50%}
+.colhead .cnt{color:var(--muted);font-family:Raleway,system-ui,sans-serif;font-size:13px}
+.hours{position:relative;border-right:1px solid var(--line)}
+.hours span{position:absolute;right:8px;transform:translateY(-50%);font-size:12px;color:var(--muted)}
+.col{position:relative;border-right:1px solid var(--line);cursor:copy}
+.col:last-child{border-right:0}
+.col .hl{position:absolute;left:0;right:0;border-top:1px solid var(--line)}
+.col .hl.half{border-top-style:dashed;opacity:.6}
+.now{position:absolute;left:0;right:0;border-top:2px solid var(--now);z-index:2;pointer-events:none}
+.now::before{content:"";position:absolute;left:-4px;top:-5px;width:8px;height:8px;border-radius:50%;background:var(--now)}
+
+.appt{position:absolute;border-radius:3px;padding:4px 8px;overflow:hidden;cursor:pointer;border:0;text-align:left;font-size:13px;line-height:1.3;
+  background:color-mix(in srgb,var(--c) 16%,var(--surface));border-left:4px solid var(--c);color:var(--ink)}
+.appt:hover{background:color-mix(in srgb,var(--c) 26%,var(--surface))}
+.appt .t{font-weight:700;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.appt .s{color:var(--muted);display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.appt .st{font-size:11px;font-weight:600}
+.appt.cancelada{opacity:.55;background:repeating-linear-gradient(135deg,transparent 0 6px,color-mix(in srgb,var(--c) 12%,transparent) 6px 12px)}
+.appt.cancelada .t{text-decoration:line-through}
+.appt.atendida{background:color-mix(in srgb,var(--c) 8%,var(--surface))}
+
+.empty{padding:28px 20px;text-align:center;color:var(--muted)}
+
+dialog{border:1px solid var(--line);border-top:5px solid var(--accent);border-radius:4px;background:var(--surface);color:var(--ink);padding:0;width:min(520px,calc(100vw - 24px));max-height:calc(100vh - 40px)}
+dialog::backdrop{background:rgba(0,0,0,.6)}
+.dlg{padding:20px}
+.dlg h2{font-family:"Playfair Display",Georgia,"Times New Roman",serif;font-weight:400;text-transform:uppercase;margin:0 0 14px;font-size:26px}
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.fields .full{grid-column:1/-1}
+label.f{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--muted);font-weight:500}
+label.f input,label.f select,label.f textarea{border:1px solid var(--line);border-radius:4px;padding:8px 10px;background:var(--bg);color:var(--ink);font-size:15px;width:100%}
+textarea{resize:vertical;min-height:64px}
+.addrow{grid-column:1/-1;display:flex;gap:8px}
+.addrow input{flex:1;border:1px solid var(--line);border-radius:4px;padding:8px 10px;background:var(--bg);color:var(--ink)}
+.warnline{grid-column:1/-1;background:var(--warn-bg);color:var(--warn);border-radius:4px;padding:8px 10px;font-size:14px}
+.dlg-foot{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end;margin-top:18px}
+.dlg-foot .spacer{flex:1}
+.team-row{display:grid;grid-template-columns:44px 1fr auto;gap:8px;align-items:center;margin-bottom:8px}
+.team-row input[type=color]{width:44px;height:38px;border:1px solid var(--line);border-radius:4px;padding:2px;background:var(--bg)}
+.team-row input[type=text]{border:1px solid var(--line);border-radius:4px;padding:8px 10px;background:var(--bg)}
+.hint{color:var(--muted);font-size:14px;margin:0 0 14px}
+.toast{border-left:5px solid var(--accent);position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--surface);padding:10px 16px;border-radius:10px;font-size:14px;opacity:0;transition:opacity .2s;pointer-events:none;z-index:50}
+.toast.show{opacity:1}
+@media (max-width:640px){
+  .fields{grid-template-columns:1fr}
+  .wday .n{font-size:18px}
+  .wday{padding:6px 2px}
+}
+@media (prefers-reduced-motion:reduce){.toast{transition:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="brandbar">
+    <span class="logo" aria-label="Eleganza Academia"><span class="w">ELEGANZA</span><span class="a">ACADEMIA</span></span>
+    <span class="tag"><span class="themes" role="group" aria-label="Color de la página"><button class="btn th" data-t="dark" type="button">Negro</button><button class="btn th" data-t="light" type="button">Blanco</button></span><span id="who"></span> <button class="btn" id="logout" hidden>Cerrar sesión</button></span>
+  </div>
+  <header class="top">
+    <h1 class="day-title" id="dayTitle"><small>Agenda del equipo</small>…</h1>
+    <div class="actions">
+      <button class="btn icon" id="prev" aria-label="Día anterior">‹</button>
+      <button class="btn" id="today">Hoy</button>
+      <button class="btn icon" id="next" aria-label="Día siguiente">›</button>
+      <input type="date" class="btn" id="datePick" aria-label="Elegir fecha">
+      <button class="btn" id="teamBtn">Equipo</button>
+      <button class="btn primary" id="newBtn">Nueva cita</button>
+    </div>
+  </header>
+
+  <nav class="teams" id="teams" aria-label="Equipos"></nav>
+  <div class="tools">
+    <div class="search">
+      <input type="search" id="q" placeholder="Buscar persona por nombre o teléfono" autocomplete="off" aria-label="Buscar persona">
+      <div class="results" id="results" hidden></div>
+    </div>
+    <button class="btn" id="nfBtn" type="button">Sin fecha<span class="badge" id="nfCount">0</span></button>
+  </div>
+  <div id="notice"></div>
+  <nav class="week" id="week" aria-label="Semana"></nav>
+  <p class="summary" id="summary"></p>
+  <section class="board"><div class="board-scroll"><div class="grid" id="grid"></div></div></section>
+</div>
+
+<dialog id="apptDlg">
+  <form class="dlg" id="apptForm" method="dialog">
+    <h2 id="apptTitle">Nueva cita</h2>
+    <div class="fields">
+      <label class="f full">Nombre de la persona<input name="cliente" required autocomplete="off" placeholder="Ej. María Gómez"></label>
+      <label class="f">Teléfono<input name="telefono" type="tel" autocomplete="off" placeholder="300 123 4567"></label>
+      <label class="f">Servicio o motivo<input name="servicio" autocomplete="off" placeholder="Ej. Valoración inicial"></label>
+      <label class="check"><input type="checkbox" name="sinFecha" id="sinFecha"><span>Aún no tiene fecha<small>Queda registrada en la lista “Sin fecha” para agendarla después.</small></span></label>
+      <label class="f">Fecha<input name="fecha" type="date" required></label>
+      <label class="f">Hora<input name="hora" type="time" required step="300"></label>
+      <label class="f">Duración<select name="duracion">
+        <option value="15">15 min</option><option value="30" selected>30 min</option><option value="45">45 min</option>
+        <option value="60">1 hora</option><option value="90">1 h 30 min</option><option value="120">2 horas</option>
+      </select></label>
+      <label class="f">Equipo<select name="equipoId" id="teamSel"></select></label>
+      <label class="f">Asignada a<select name="staffId" id="staffSel"></select></label>
+      <div class="addrow" id="addRow" hidden>
+        <input id="newPerson" placeholder="Nombre de la persona" autocomplete="off" aria-label="Nombre de la persona nueva">
+        <button type="button" class="btn primary" id="addPersonBtn">Agregar</button>
+        <button type="button" class="btn" id="addPersonCancel">Cancelar</button>
+      </div>
+      <label class="f">Estado<select name="estado">
+        <option value="pendiente">Pendiente</option><option value="confirmada">Confirmada</option>
+        <option value="atendida">Atendida</option><option value="cancelada">Cancelada</option>
+      </select></label>
+      <label class="f full">Notas<textarea name="notas" placeholder="Información adicional"></textarea></label>
+      <div class="warnline" id="conflict" hidden></div>
+    </div>
+    <p class="hint" id="creadoPor" style="margin:14px 0 0"></p>
+    <p class="hint" style="margin:4px 0 0">Las citas no se pueden borrar. Si la persona no asistirá, cambia el estado a “Cancelada” y queda en el historial.</p>
+    <div class="dlg-foot">
+      <span class="spacer"></span>
+      <button type="button" class="btn" id="cancelAppt">Cerrar</button>
+      <button type="submit" class="btn primary" id="saveAppt">Guardar cita</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="nfDlg">
+  <div class="dlg">
+    <h2 id="nfTitle">Sin fecha</h2>
+    <p class="hint">Personas registradas que todavía no tienen fecha. Toca una para asignarle día y hora.</p>
+    <div class="nf-list" id="nfList"></div>
+    <div class="dlg-foot">
+      <button type="button" class="btn" id="nfClose">Cerrar</button>
+      <button type="button" class="btn primary" id="nfNew">Registrar sin fecha</button>
+    </div>
+  </div>
+</dialog>
+
+<dialog id="teamDlg">
+  <div class="dlg">
+    <h2 id="teamDlgTitle">Equipo</h2>
+    <label class="f name">Nombre del equipo<input id="teamName" autocomplete="off" placeholder="Ej. Suba"></label>
+    <p class="hint">Personas que atienden citas en este equipo. Cada una tiene su propia columna en la agenda.</p>
+    <div id="teamList"></div>
+    <button class="btn" id="addMember" type="button">Agregar persona</button>
+    <div class="dlg-foot">
+      <span class="spacer"></span>
+      <button type="button" class="btn" id="cancelTeam">Cerrar</button>
+      <button type="button" class="btn primary" id="saveTeam">Guardar equipo</button>
+    </div>
+  </div>
+</dialog>
+
+<div class="login" id="login" hidden>
+  <span class="themes" role="group" aria-label="Color de la página"><button class="btn th" data-t="dark" type="button">Negro</button><button class="btn th" data-t="light" type="button">Blanco</button></span>
+  <form class="login-card" id="loginForm">
+    <span class="logo" aria-label="Eleganza Academia"><span class="w">ELEGANZA</span><span class="a">ACADEMIA</span></span>
+    <h2>Agenda de citas</h2>
+    <p class="hint">Entra con el correo y la contraseña que te dio la administración.</p>
+    <label class="f">Correo<input type="email" id="lEmail" required autocomplete="username"></label>
+    <label class="f">Contraseña<input type="password" id="lPass" required autocomplete="current-password"></label>
+    <button class="btn primary" type="submit" id="lBtn">Entrar</button>
+    <button class="linkbtn" type="button" id="lReset">Olvidé mi contraseña</button>
+    <p class="msg" id="lMsg"></p>
+  </form>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<!-- Firebase (base de datos y usuarios) -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script>
+  // Datos del proyecto Firebase "App Agendamientos zona centro"
+  window.FIREBASE_CONFIG = {
+    apiKey: "AIzaSyA_27FbAJaNUcOArnKmZw2e8z_ng86Apto",
+    authDomain: "app-agendamientos-zona-centro.firebaseapp.com",
+    projectId: "app-agendamientos-zona-centro",
+    storageBucket: "app-agendamientos-zona-centro.firebasestorage.app",
+    messagingSenderId: "456789039719",
+    appId: "1:456789039719:web:c475a15e8cb4b91815d2c2"
+  };
+</script>
+<script>
+(function(){
+  const START_H = 7, END_H = 20, PX = 1.1; // px por minuto
+  const PALETTE = ["#af62ff","#4FB3E8","#F27BB5","#E8B33C","#5CC98A","#FF8A5B","#7F8CFF","#3FCFC0"];
+  const ESTADOS = {pendiente:"Pendiente",confirmada:"Confirmada",atendida:"Atendida",cancelada:"Cancelada"};
+  const DIAS = ["lun","mar","mié","jue","vie","sáb","dom"];
+
+  const $ = id => document.getElementById(id);
+  const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  const pad = n => String(n).padStart(2,"0");
+  const toStr = d => d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate());
+  const parse = s => { const [y,m,d] = s.split("-").map(Number); return new Date(y,m-1,d); };
+  const addDays = (s,n) => { const d = parse(s); d.setDate(d.getDate()+n); return toStr(d); };
+  const weekStart = s => { const d = parse(s); const wd = (d.getDay()+6)%7; d.setDate(d.getDate()-wd); return toStr(d); };
+  const mins = h => { const [a,b] = h.split(":").map(Number); return a*60+b; };
+  const hhmm = m => pad(Math.floor(m/60))+":"+pad(m%60);
+  const uid = () => Date.now().toString(36)+Math.random().toString(36).slice(2,8);
+
+  const state = { date: toStr(new Date()), citas: [], equipos: [], equipoId: null, equipo: [], canWrite: true, mode: "local", editing: null, creatingTeam: false };
+  try{ state.equipoId = localStorage.getItem("agenda-equipo-sel"); }catch(e){}
+  state.userEmail = null; state.sinFecha = []; state.openCita = null;
+  function setEquipos(list){
+    state.equipos = list;
+    if(!list.find(t => t.id === state.equipoId)) state.equipoId = list[0]?.id || null;
+    state.equipo = (list.find(t => t.id === state.equipoId)?.miembros) || [];
+  }
+  function selectTeam(id){
+    state.equipoId = id;
+    try{ localStorage.setItem("agenda-equipo-sel", id); }catch(e){}
+    state.equipo = (state.equipos.find(t => t.id === id)?.miembros) || [];
+    store.weekKey = null; store.watchWeek(weekStart(state.date)); render();
+  }
+
+  // ---------- Almacenamiento (compartido con db; si no está disponible, local) ----------
+  const store = {
+    db: null, weekUnsub: null, weekKey: null,
+    watchWeek(ws){
+      const key = ws+"|"+state.equipoId;
+      this.watchSinFecha();
+      if(this.weekKey === key || !this.db) return;
+      this.weekKey = key;
+      if(this.weekUnsub){ this.weekUnsub(); this.weekUnsub = null; }
+      const we = addDays(ws,6), team = state.equipoId;
+      if(!team){ state.citas = []; render(); return; }
+      this.weekUnsub = this.db.collection("citas").where("fecha",">=",ws).where("fecha","<=",we).onSnapshot(snap => {
+        state.citas = snap.docs.map(d => Object.assign({id:d.id}, d.data())).filter(c => c.equipoId === team);
+        render();
+      }, err => showNotice("No se pudieron cargar las citas ("+(err.code||"error")+"). Recarga la página para intentarlo de nuevo."));
+    },
+    nfUnsub: null, nfKey: null,
+    watchSinFecha(){
+      const team = state.equipoId;
+      if(!this.db || this.nfKey === team) return;
+      this.nfKey = team;
+      if(this.nfUnsub){ this.nfUnsub(); this.nfUnsub = null; }
+      if(!team){ state.sinFecha = []; render(); return; }
+      this.nfUnsub = this.db.collection("citas").where("equipoId","==",team).where("fecha","==","").onSnapshot(snap => {
+        state.sinFecha = snap.docs.map(d => Object.assign({id:d.id}, d.data())).sort((a,b) => (a.creadoEn||"").localeCompare(b.creadoEn||""));
+        render(); if($("nfDlg").open) renderNf();
+      }, err => showNotice("No se pudo cargar la lista sin fecha ("+(err.code||"error")+")."));
+    },
+    async search(term){
+      const snap = await this.db.collection("citas").where("busqueda","array-contains",term).limit(40).get();
+      return snap.docs.map(d => Object.assign({id:d.id}, d.data()));
+    },
+    async saveCita(id, data){ await this.db.collection("citas").doc(id).set(data); },
+    async saveEquipos(list){ await this.db.doc("config/equipos").set({equipos:list}); setEquipos(list); }
+  };
+
+  // ---------- Render ----------
+  function showNotice(t){ $("notice").innerHTML = t ? '<div class="notice">'+esc(t)+'</div>' : ""; }
+  function toast(t){ const el = $("toast"); el.textContent = t; el.classList.add("show"); clearTimeout(toast._t); toast._t = setTimeout(()=>el.classList.remove("show"), 2200); }
+  function staffById(id){ return state.equipo.find(m => m.id === id); }
+  function columns(){
+    const cols = state.equipo.map(m => ({id:m.id, nombre:m.nombre, color:m.color}));
+    const dayCitas = state.citas.filter(c => c.fecha === state.date);
+    if(!cols.length || dayCitas.some(c => !staffById(c.staffId))) cols.push({id:"", nombre: cols.length ? "Sin asignar" : "Agenda", color:"#8E8796"});
+    return cols;
+  }
+
+  function render(){
+    const d = parse(state.date);
+    const longDate = d.toLocaleDateString("es-CO",{weekday:"long", day:"numeric", month:"long"});
+    const isToday = state.date === toStr(new Date());
+    $("dayTitle").innerHTML = "<small>"+esc(state.equipos.find(t => t.id === state.equipoId)?.nombre ? "Equipo "+state.equipos.find(t => t.id === state.equipoId).nombre : "Agenda del equipo")+(isToday ? " · hoy" : "")+"</small>"+'<span>'+esc(longDate)+'</span><span class="bar" aria-hidden="true"></span>';
+    $("datePick").value = state.date;
+    const team = state.equipos.find(t => t.id === state.equipoId);
+    $("teams").innerHTML = state.equipos.map(t => '<button class="team-tab'+(t.id===state.equipoId?" sel":"")+'" data-team="'+esc(t.id)+'">'+esc(t.nombre)+'<span class="k">'+(t.miembros||[]).length+'</span></button>').join("")
+      + (state.canWrite ? '<button class="team-tab add" id="addTeam">Nuevo equipo</button>' : "");
+    $("teamBtn").textContent = team ? "Personas de "+team.nombre : "Equipo";
+    $("newBtn").disabled = !team;
+    $("nfCount").textContent = state.sinFecha.length;
+    $("nfCount").hidden = !state.sinFecha.length;
+    $("nfBtn").disabled = !team;
+    $("newBtn").hidden = !state.canWrite;
+    $("teamBtn").hidden = !state.canWrite;
+
+    // Semana
+    const ws = weekStart(state.date), todayS = toStr(new Date());
+    let wh = "";
+    for(let i=0;i<7;i++){
+      const s = addDays(ws,i), n = state.citas.filter(c => c.fecha === s && c.estado !== "cancelada").length;
+      wh += '<button class="wday'+(s===state.date?" sel":"")+(s===todayS?" today":"")+'" data-d="'+s+'"><span class="d">'+DIAS[i]+'</span><span class="n">'+parse(s).getDate()+'</span><span class="c">'+(n? n+(n===1?" cita":" citas") : "")+'</span></button>';
+    }
+    $("week").innerHTML = wh;
+
+    // Resumen
+    const day = state.citas.filter(c => c.fecha === state.date);
+    const by = k => day.filter(c => c.estado === k).length;
+    const activas = day.length - by("cancelada");
+    $("summary").innerHTML = day.length
+      ? "<span><b>"+activas+"</b> "+(activas===1?"cita activa":"citas activas")+"</span><span><b>"+by("confirmada")+"</b> confirmadas</span><span><b>"+by("pendiente")+"</b> pendientes</span><span><b>"+by("atendida")+"</b> atendidas</span><span><b>"+by("cancelada")+"</b> canceladas</span>"
+      : !state.equipos.length ? "<span>Crea un equipo para empezar a agendar.</span>"
+      : "<span>No hay citas agendadas este día."+(state.canWrite?" Toca un espacio en la agenda o usa “Nueva cita”.":"")+"</span>";
+
+    // Tablero
+    const cols = columns();
+    const H = (END_H-START_H)*60*PX;
+    const grid = $("grid");
+    grid.style.gridTemplateColumns = "56px repeat("+cols.length+", minmax(170px,1fr))";
+    let html = '<div class="colhead" style="border-right:1px solid var(--line)"></div>';
+    cols.forEach(c => {
+      const n = day.filter(x => (staffById(x.staffId)?x.staffId:"") === c.id && x.estado !== "cancelada").length;
+      html += '<div class="colhead"><span class="sw" style="background:'+esc(c.color)+'"></span>'+esc(c.nombre)+' <span class="cnt">'+n+'</span></div>';
+    });
+    let hours = '<div class="hours" style="height:'+H+'px">';
+    for(let h=START_H+1; h<END_H; h++) hours += '<span style="top:'+((h-START_H)*60*PX)+'px">'+pad(h)+':00</span>';
+    hours += "</div>";
+    html += hours;
+
+    const now = new Date(), nowMin = now.getHours()*60+now.getMinutes();
+    cols.forEach(c => {
+      let col = '<div class="col" data-staff="'+esc(c.id)+'" style="height:'+H+'px">';
+      for(let h=START_H; h<END_H; h++){
+        if(h>START_H) col += '<div class="hl" style="top:'+((h-START_H)*60*PX)+'px"></div>';
+        col += '<div class="hl half" style="top:'+((h-START_H)*60*PX+30*PX)+'px"></div>';
+      }
+      if(isToday && nowMin >= START_H*60 && nowMin <= END_H*60) col += '<div class="now" style="top:'+((nowMin-START_H*60)*PX)+'px"></div>';
+      const items = day.filter(x => (staffById(x.staffId)?x.staffId:"") === c.id)
+        .map(x => ({x, s: mins(x.hora), e: mins(x.hora)+Number(x.duracion||30)}))
+        .sort((a,b) => a.s-b.s || a.e-b.e);
+      layout(items).forEach(it => {
+        const x = it.x;
+        const top = Math.max(0,(it.s-START_H*60)*PX), h = Math.max(24,(it.e-it.s)*PX-2);
+        const w = 100/it.lanes;
+        col += '<button class="appt '+esc(x.estado)+'" data-id="'+esc(x.id)+'" style="--c:'+esc(c.color)+';top:'+top+'px;height:'+h+'px;left:calc('+(w*it.lane)+'% + 3px);width:calc('+w+'% - 6px)">'
+          + '<span class="t">'+esc(x.hora)+' · '+esc(x.cliente)+'</span>'
+          + (h>40 ? '<span class="s">'+esc(x.servicio || "Sin servicio")+'</span>' : "")
+          + (h>58 ? '<span class="s st">'+esc(ESTADOS[x.estado]||"")+'</span>' : "")
+          + "</button>";
+      });
+      col += "</div>";
+      html += col;
+    });
+    grid.innerHTML = html;
+  }
+
+  // Coloca citas que se cruzan lado a lado
+  function layout(items){
+    let cluster = [], clusterEnd = -1, out = [];
+    const flush = () => { const lanes = Math.max(1, ...cluster.map(c => c.lane+1)); cluster.forEach(c => { c.lanes = lanes; out.push(c); }); cluster = []; };
+    items.forEach(it => {
+      if(it.s >= clusterEnd && cluster.length) flush();
+      const used = cluster.filter(c => c.e > it.s).map(c => c.lane);
+      let lane = 0; while(used.includes(lane)) lane++;
+      it.lane = lane; cluster.push(it); clusterEnd = Math.max(clusterEnd, it.e);
+    });
+    if(cluster.length) flush();
+    return out;
+  }
+
+  function goTo(s){ state.date = s; store.watchWeek(weekStart(s)); render(); }
+
+  // ---------- Color de la página ----------
+  function currentTheme(){
+    const t = document.documentElement.getAttribute("data-theme");
+    if(t) return t;
+    return window.matchMedia && matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  }
+  function paintThemeButtons(){
+    const t = currentTheme();
+    document.querySelectorAll(".th").forEach(b => { const on = b.dataset.t === t; b.classList.toggle("on", on); b.setAttribute("aria-pressed", on); });
+    const m = document.querySelector('meta[name="theme-color"]'); if(m) m.content = t === "dark" ? "#000000" : "#ffffff";
+  }
+  document.addEventListener("click", e => {
+    const b = e.target.closest(".th"); if(!b) return;
+    document.documentElement.setAttribute("data-theme", b.dataset.t);
+    try{ localStorage.setItem("agenda-tema", b.dataset.t); }catch(err){}
+    paintThemeButtons();
+  });
+  paintThemeButtons();
+
+  // ---------- Búsqueda ----------
+  const norm = t => String(t||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().trim();
+  function searchTokens(cliente, telefono){
+    const out = new Set();
+    norm(cliente).split(/[^a-z0-9ñ]+/).filter(Boolean).forEach(w => { for(let i=2;i<=Math.min(w.length,15);i++) out.add(w.slice(0,i)); });
+    const d = String(telefono||"").replace(/\D/g,"");
+    for(let i=3;i<=Math.min(d.length,12);i++) out.add(d.slice(0,i));
+    for(let a=1;a<d.length;a++) for(let e=a+4;e<=Math.min(d.length,a+12);e++) out.add(d.slice(a,e));
+    return [...out];
+  }
+  const fmtFecha = f => f ? parse(f).toLocaleDateString("es-CO",{weekday:"short",day:"numeric",month:"short",year:"numeric"}) : "";
+  const teamName = id => state.equipos.find(t => t.id === id)?.nombre || "Sin equipo";
+  const personName = (teamId, sid) => (state.equipos.find(t => t.id === teamId)?.miembros||[]).find(m => m.id === sid)?.nombre || "Sin asignar";
+  let qSeq = 0, qTimer = null, lastResults = [];
+  function queryTerms(q){
+    const digits = norm(q).replace(/[\s.()-]/g,"");
+    if(/^\d+$/.test(digits)) return digits.length >= 3 ? [digits.slice(-12)] : [];
+    return norm(q).split(/\s+/).filter(Boolean).map(w => /^[\d-]+$/.test(w) ? w.replace(/\D/g,"").slice(0,12) : w.replace(/[^a-z0-9ñ]/g,"").slice(0,15)).filter(w => w.length >= 2);
+  }
+  async function runSearch(){
+    const q = $("q").value, terms = queryTerms(q), box = $("results");
+    if(!terms.length || !store.db){ box.hidden = true; return; }
+    const seq = ++qSeq;
+    box.hidden = false; box.innerHTML = '<div class="res-empty">Buscando…</div>';
+    try{
+      const main = terms.slice().sort((a,b) => b.length-a.length)[0];
+      let rows = await store.search(main);
+      if(seq !== qSeq) return;
+      rows = rows.filter(c => terms.every(t => (c.busqueda||[]).includes(t)));
+      rows.sort((a,b) => (a.fecha? 1:0)-(b.fecha? 1:0) || (b.fecha||"").localeCompare(a.fecha||""));
+      lastResults = rows;
+      box.innerHTML = rows.length ? rows.map((c,i) =>
+        '<button class="res" data-i="'+i+'"><b>'+esc(c.cliente)+'</b><span>'
+        + (c.fecha ? esc(fmtFecha(c.fecha)+" · "+c.hora) : '<span class="nf">Sin fecha</span>')
+        + ' · Equipo '+esc(teamName(c.equipoId))+' · '+esc(personName(c.equipoId,c.staffId))
+        + (c.telefono ? ' · '+esc(c.telefono) : '')
+        + (c.estado === "cancelada" ? ' · Cancelada' : '')+'</span></button>').join("")
+        : '<div class="res-empty">No se encontró a nadie con “'+esc(q.trim())+'”. Revisa cómo está escrito o busca por teléfono.</div>';
+    }catch(e){ if(seq === qSeq) box.innerHTML = '<div class="res-empty">No se pudo buscar ('+esc(e.code||"error")+'). Inténtalo de nuevo.</div>'; }
+  }
+  $("q").addEventListener("input", () => { clearTimeout(qTimer); qTimer = setTimeout(runSearch, 350); });
+  $("q").addEventListener("focus", () => { if($("q").value.trim()) runSearch(); });
+  $("q").addEventListener("keydown", e => { if(e.key === "Escape"){ $("results").hidden = true; } if(e.key === "ArrowDown"){ e.preventDefault(); $("results").querySelector(".res")?.focus(); } });
+  document.addEventListener("click", e => { if(!e.target.closest(".search")) $("results").hidden = true; });
+  $("results").addEventListener("click", e => {
+    const b = e.target.closest("[data-i]"); if(!b) return;
+    const c = lastResults[Number(b.dataset.i)]; $("results").hidden = true;
+    if(c.fecha){
+      if(c.equipoId !== state.equipoId && state.equipos.some(t => t.id === c.equipoId)) selectTeam(c.equipoId);
+      goTo(c.fecha);
+    }
+    openAppt(c);
+  });
+
+  // ---------- Sin fecha ----------
+  function renderNf(){
+    const t = state.equipos.find(x => x.id === state.equipoId);
+    $("nfTitle").textContent = "Sin fecha · "+(t ? t.nombre : "");
+    $("nfNew").hidden = !state.canWrite || !t;
+    $("nfList").innerHTML = state.sinFecha.length ? state.sinFecha.map((c,i) =>
+      '<button class="nf-item" data-i="'+i+'"><b>'+esc(c.cliente)+'</b><span>'
+      + esc([c.telefono, c.servicio, personName(c.equipoId,c.staffId)].filter(Boolean).join(" · "))
+      + '</span>'+(c.notas ? '<span>'+esc(c.notas)+'</span>' : '')
+      + '<span>Registrada '+esc(c.creadoEn ? new Date(c.creadoEn).toLocaleDateString("es-CO",{day:"numeric",month:"short"}) : "")+(c.creadoPor ? ' por '+esc(c.creadoPor) : '')+'</span></button>').join("")
+      : '<p class="hint">No hay personas pendientes por fecha en este equipo.</p>';
+  }
+  $("nfBtn").addEventListener("click", () => { renderNf(); $("nfDlg").showModal(); });
+  $("nfClose").addEventListener("click", () => $("nfDlg").close());
+  $("nfNew").addEventListener("click", () => { $("nfDlg").close(); openAppt(null, {sinFecha:true}); });
+  $("nfList").addEventListener("click", e => { const b = e.target.closest("[data-i]"); if(!b) return; $("nfDlg").close(); openAppt(state.sinFecha[Number(b.dataset.i)]); });
+
+  // ---------- Diálogo de cita ----------
+  const form = $("apptForm");
+  function membersOf(teamId){ return (state.equipos.find(t => t.id === teamId)?.miembros) || []; }
+  function fillTeams(sel){
+    $("teamSel").innerHTML = state.equipos.map(t => '<option value="'+esc(t.id)+'">'+esc(t.nombre)+'</option>').join("");
+    $("teamSel").value = sel || state.equipoId || "";
+  }
+  function fillStaff(sel){
+    const ms = membersOf($("teamSel").value);
+    const opts = ms.map(m => '<option value="'+esc(m.id)+'">'+esc(m.nombre)+'</option>').join("");
+    $("staffSel").innerHTML = '<option value="">Sin asignar</option>'+opts+(state.canWrite ? '<option value="__new__">+ Agregar persona nueva…</option>' : "");
+    $("staffSel").value = ms.some(m => m.id === sel) ? sel : "";
+    $("addRow").hidden = true;
+  }
+  $("teamSel").addEventListener("change", () => { fillStaff(membersOf($("teamSel").value)[0]?.id || ""); checkConflict(); });
+  $("staffSel").addEventListener("change", () => {
+    if($("staffSel").value === "__new__"){ $("addRow").hidden = false; $("newPerson").value = ""; $("newPerson").focus(); }
+    else $("addRow").hidden = true;
+  });
+  $("addPersonCancel").addEventListener("click", () => { $("addRow").hidden = true; $("staffSel").value = ""; });
+  $("newPerson").addEventListener("keydown", e => { if(e.key === "Enter"){ e.preventDefault(); $("addPersonBtn").click(); } });
+  $("addPersonBtn").addEventListener("click", async () => {
+    const nombre = $("newPerson").value.trim(), teamId = $("teamSel").value;
+    if(!nombre || !teamId){ $("newPerson").focus(); return; }
+    const ms = membersOf(teamId);
+    const m = {id: uid(), nombre, color: PALETTE[ms.length % PALETTE.length]};
+    const list = state.equipos.map(t => t.id === teamId ? Object.assign({}, t, {miembros: ms.concat([m])}) : t);
+    $("addPersonBtn").disabled = true;
+    try{
+      await store.saveEquipos(list);
+      setEquipos(list); state.equipo = membersOf(state.equipoId);
+      fillStaff(m.id); render(); toast(nombre+" agregada al equipo");
+    }catch(e){ handleWriteError(e); }
+    $("addPersonBtn").disabled = false;
+  });
+  function openAppt(cita, preset){
+    state.editing = cita ? cita.id : null;
+    $("apptTitle").textContent = cita ? "Editar cita" : "Nueva cita";
+    $("saveAppt").hidden = !state.canWrite;
+    const v = cita || Object.assign({cliente:"",telefono:"",servicio:"",fecha:state.date,hora:"09:00",duracion:30,staffId:state.equipo[0]?.id||"",estado:"pendiente",notas:""}, preset||{});
+    fillTeams(v.equipoId || state.equipoId); fillStaff(v.staffId);
+    $("creadoPor").textContent = cita && cita.creadoPor ? "Agendada por "+cita.creadoPor : "";
+    ["cliente","telefono","servicio","fecha","hora","notas","estado"].forEach(k => form.elements[k].value = v[k] ?? "");
+    form.elements.duracion.value = String(v.duracion || 30);
+    state.openCita = cita || null;
+    const noDate = cita ? !cita.fecha : !!v.sinFecha;
+    [...form.elements].forEach(el => { if(el.name) el.disabled = !state.canWrite; });
+    $("sinFecha").checked = noDate; syncNoDate();
+    checkConflict();
+    $("apptDlg").showModal();
+    if(state.canWrite) setTimeout(()=>form.elements.cliente.focus(), 30);
+  }
+  function syncNoDate(){
+    const on = $("sinFecha").checked, f = form.elements;
+    f.fecha.required = f.hora.required = !on;
+    f.fecha.disabled = f.hora.disabled = on || !state.canWrite;
+    if(!on){ if(!f.fecha.value) f.fecha.value = state.date; if(!f.hora.value) f.hora.value = "09:00"; }
+    $("apptTitle").textContent = state.editing ? (on ? "Editar · sin fecha" : "Editar cita") : (on ? "Registrar sin fecha" : "Nueva cita");
+  }
+  $("sinFecha").addEventListener("change", () => { syncNoDate(); checkConflict(); });
+  function checkConflict(){
+    const f = form.elements, staff = f.staffId.value, fecha = f.fecha.value, hora = f.hora.value;
+    const box = $("conflict");
+    if($("sinFecha").checked || !staff || staff === "__new__" || !fecha || !hora){ box.hidden = true; return; }
+    const s = mins(hora), e = s + Number(f.duracion.value);
+    if(f.equipoId.value !== state.equipoId){ box.hidden = true; return; }
+    const hit = state.citas.find(c => c.id !== state.editing && c.fecha === fecha && c.staffId === staff && c.estado !== "cancelada" && mins(c.hora) < e && mins(c.hora)+Number(c.duracion||30) > s);
+    if(hit){ box.hidden = false; box.textContent = "Ojo: "+(staffById(staff)?.nombre||"esta persona")+" ya tiene una cita con "+hit.cliente+" a las "+hit.hora+". Puedes guardarla igual si es intencional."; }
+    else box.hidden = true;
+  }
+  form.addEventListener("input", checkConflict);
+  form.addEventListener("submit", async ev => {
+    ev.preventDefault();
+    if(!state.canWrite) return;
+    const f = form.elements;
+    if(!f.cliente.value.trim()){ f.cliente.focus(); return; }
+    if(!f.equipoId.value) return;
+    if(f.staffId.value === "__new__"){ $("newPerson").focus(); return; }
+    const id = state.editing || uid();
+    const prev = state.openCita && state.openCita.id === id ? state.openCita : state.citas.find(c => c.id === id);
+    const noDate = $("sinFecha").checked;
+    const data = {
+      cliente: f.cliente.value.trim(), telefono: f.telefono.value.trim(), servicio: f.servicio.value.trim(),
+      fecha: noDate ? "" : f.fecha.value, hora: noDate ? "" : f.hora.value, duracion: Number(f.duracion.value),
+      busqueda: searchTokens(f.cliente.value, f.telefono.value),
+      staffId: f.staffId.value, estado: f.estado.value, notas: f.notas.value.trim(),
+      equipoId: f.equipoId.value,
+      creadoPor: prev?.creadoPor || state.userEmail || "",
+      creadoEn: prev?.creadoEn || new Date().toISOString(), actualizadoEn: new Date().toISOString()
+    };
+    try{
+      await store.saveCita(id, data);
+      $("apptDlg").close();
+      toast(noDate ? "Guardada en la lista Sin fecha" : (state.editing ? "Cita actualizada" : "Cita guardada"));
+      if(data.equipoId !== state.equipoId) selectTeam(data.equipoId);
+      if(data.fecha && data.fecha !== state.date) goTo(data.fecha);
+      if($("q").value.trim()) runSearch();
+    }catch(e){ handleWriteError(e); }
+  });
+  $("cancelAppt").addEventListener("click", () => $("apptDlg").close());
+
+  function handleWriteError(e){
+    if(e && e.code === "permission-denied") showNotice("Tu usuario no tiene permiso para guardar cambios. Cierra sesión y vuelve a entrar.");
+    else if(e && e.code === "resource-exhausted") showNotice("La agenda llegó a su límite de almacenamiento. Elimina citas antiguas para seguir agendando.");
+    else showNotice("No se pudo guardar el cambio. Revisa tu conexión e inténtalo de nuevo.");
+    $("apptDlg").open && $("apptDlg").close();
+  }
+
+  // ---------- Diálogo de equipo ----------
+  let draft = [];
+  function renderTeam(){
+    $("teamList").innerHTML = draft.length ? draft.map((m,i) =>
+      '<div class="team-row"><input type="color" data-i="'+i+'" data-k="color" value="'+esc(m.color)+'" aria-label="Color"><input type="text" data-i="'+i+'" data-k="nombre" value="'+esc(m.nombre)+'" placeholder="Nombre" aria-label="Nombre"><button class="btn danger" data-rm="'+i+'" type="button">Quitar</button></div>'
+    ).join("") : '<p class="hint">Aún no hay personas. Agrega a quienes atienden citas.</p>';
+  }
+  function openTeam(creating){
+    state.creatingTeam = creating;
+    const t = creating ? null : state.equipos.find(x => x.id === state.equipoId);
+    draft = t ? (t.miembros||[]).map(m => Object.assign({}, m)) : [];
+    $("teamName").value = t ? t.nombre : "";
+    $("teamDlgTitle").textContent = creating ? "Nuevo equipo" : "Equipo "+(t?.nombre||"");
+    renderTeam(); $("teamDlg").showModal();
+    if(creating) setTimeout(()=>$("teamName").focus(), 30);
+  }
+  $("teamBtn").addEventListener("click", () => openTeam(!state.equipos.length));
+  $("teams").addEventListener("click", e => {
+    if(e.target.closest("#addTeam")){ openTeam(true); return; }
+    const b = e.target.closest("[data-team]"); if(b) selectTeam(b.dataset.team);
+  });
+
+  $("addMember").addEventListener("click", () => { draft.push({id:uid(), nombre:"", color:PALETTE[draft.length % PALETTE.length]}); renderTeam(); const ins = $("teamList").querySelectorAll('input[type=text]'); ins[ins.length-1]?.focus(); });
+  $("teamList").addEventListener("input", e => { const i = e.target.dataset.i; if(i!=null) draft[i][e.target.dataset.k] = e.target.value; });
+  $("teamList").addEventListener("click", e => { const i = e.target.dataset.rm; if(i!=null){ draft.splice(Number(i),1); renderTeam(); } });
+  $("cancelTeam").addEventListener("click", () => $("teamDlg").close());
+  $("saveTeam").addEventListener("click", async () => {
+    const nombre = $("teamName").value.trim();
+    if(!nombre){ $("teamName").focus(); return; }
+    const miembros = draft.map(m => ({id:m.id, nombre:m.nombre.trim(), color:m.color})).filter(m => m.nombre);
+    let list, newId = null;
+    if(state.creatingTeam){ newId = uid(); list = state.equipos.concat([{id:newId, nombre, miembros}]); }
+    else list = state.equipos.map(t => t.id === state.equipoId ? Object.assign({}, t, {nombre, miembros}) : t);
+    try{
+      await store.saveEquipos(list); $("teamDlg").close(); toast("Equipo guardado");
+      if(newId){ setEquipos(list); selectTeam(newId); }
+    }catch(e){ $("teamDlg").close(); handleWriteError(e); }
+  });
+
+  // ---------- Navegación y clics ----------
+  $("prev").addEventListener("click", () => goTo(addDays(state.date,-1)));
+  $("next").addEventListener("click", () => goTo(addDays(state.date,1)));
+  $("today").addEventListener("click", () => goTo(toStr(new Date())));
+  $("datePick").addEventListener("change", e => e.target.value && goTo(e.target.value));
+  $("week").addEventListener("click", e => { const b = e.target.closest("[data-d]"); if(b) goTo(b.dataset.d); });
+  $("newBtn").addEventListener("click", () => openAppt(null));
+  $("grid").addEventListener("click", e => {
+    const a = e.target.closest(".appt");
+    if(a){ openAppt(state.citas.find(c => c.id === a.dataset.id)); return; }
+    const col = e.target.closest(".col");
+    if(col && state.canWrite){
+      const y = e.clientY - col.getBoundingClientRect().top;
+      let m = START_H*60 + Math.floor(y/PX/30)*30;
+      m = Math.min(Math.max(m, START_H*60), END_H*60-30);
+      openAppt(null, {hora: hhmm(m), staffId: col.dataset.staff});
+    }
+  });
+  setInterval(() => { if(state.date === toStr(new Date())) render(); }, 60000);
+
+  // ---------- Inicio con Firebase ----------
+  const EQUIPOS_INICIALES = [
+    {id:"suba",nombre:"Suba",miembros:[]},{id:"soacha",nombre:"Soacha",miembros:[]},
+    {id:"fontibon",nombre:"Fontibón",miembros:[]},{id:"pasto",nombre:"Pasto",miembros:[]},
+    {id:"kennedy",nombre:"Kennedy",miembros:[]},{id:"chapinero",nombre:"Chapinero",miembros:[]},
+    {id:"zipaquira",nombre:"Zipaquirá",miembros:[]},{id:"venecia",nombre:"Venecia",miembros:[]}
+  ];
+  const cfg = window.FIREBASE_CONFIG || {};
+  render();
+  if(!window.firebase || !cfg.apiKey || String(cfg.apiKey).indexOf("PEGA") === 0){
+    showNotice("Falta configurar Firebase: abre index.html y pega los datos de tu proyecto en FIREBASE_CONFIG (ver la guía LEEME).");
+    return;
+  }
+  firebase.initializeApp(cfg);
+  const auth = firebase.auth();
+  store.db = firebase.firestore();
+  let equiposUnsub = null;
+
+  const lMsg = (t, ok) => { $("lMsg").textContent = t || ""; $("lMsg").className = "msg"+(ok?" ok":""); };
+  const authError = c => ({
+    "auth/invalid-credential":"Correo o contraseña incorrectos.","auth/wrong-password":"Correo o contraseña incorrectos.",
+    "auth/user-not-found":"Correo o contraseña incorrectos.","auth/invalid-email":"El correo no es válido.",
+    "auth/too-many-requests":"Demasiados intentos. Espera unos minutos e inténtalo de nuevo.",
+    "auth/network-request-failed":"Sin conexión. Revisa tu internet."
+  })[c] || "No se pudo entrar ("+c+").";
+  $("loginForm").addEventListener("submit", async e => {
+    e.preventDefault(); lMsg(""); $("lBtn").disabled = true;
+    try{ await auth.signInWithEmailAndPassword($("lEmail").value.trim(), $("lPass").value); }
+    catch(err){ lMsg(authError(err.code)); }
+    $("lBtn").disabled = false;
+  });
+  $("lReset").addEventListener("click", async () => {
+    const em = $("lEmail").value.trim();
+    if(!em){ lMsg("Escribe tu correo y vuelve a tocar “Olvidé mi contraseña”."); $("lEmail").focus(); return; }
+    try{ await auth.sendPasswordResetEmail(em); lMsg("Te enviamos un correo para crear una contraseña nueva.", true); }
+    catch(err){ lMsg(authError(err.code)); }
+  });
+  $("logout").addEventListener("click", () => auth.signOut());
+
+  auth.onAuthStateChanged(async u => {
+    if(!u){
+      state.userEmail = null; $("login").hidden = false; $("logout").hidden = true; $("who").textContent = "";
+      if(equiposUnsub){ equiposUnsub(); equiposUnsub = null; }
+      if(store.weekUnsub){ store.weekUnsub(); store.weekUnsub = null; }
+      if(store.nfUnsub){ store.nfUnsub(); store.nfUnsub = null; } store.nfKey = null; state.sinFecha = [];
+      store.weekKey = null; state.citas = []; return;
+    }
+    state.userEmail = u.email; $("login").hidden = true; $("logout").hidden = false; $("who").textContent = u.email;
+    const ref = store.db.doc("config/equipos");
+    try{ const first = await ref.get(); if(!first.exists) await ref.set({equipos: EQUIPOS_INICIALES}); }catch(e){}
+    equiposUnsub = ref.onSnapshot(snap => {
+      const prevId = state.equipoId;
+      setEquipos((snap.exists && snap.data().equipos) || []);
+      if(state.equipoId !== prevId || store.weekKey === null){ store.weekKey = null; store.watchWeek(weekStart(state.date)); }
+      render();
+    }, err => showNotice("No se pudieron cargar los equipos ("+err.code+")."));
+  });
+})();
+</script>
+</body>
+</html>
